@@ -6,6 +6,13 @@ using namespace std;
  * Function prototypes
 *******************************************************************************/
 
+// Tail recursive helper prototypes
+unsigned fact_helper(unsigned n, unsigned acc);
+unsigned fib_helper(unsigned n, unsigned a, unsigned b);
+unsigned mult_helper(unsigned x, unsigned y, unsigned acc);
+unsigned power_helper(unsigned x, unsigned y, unsigned acc);
+unsigned product_helper(unsigned x, unsigned y, unsigned acc);
+
 unsigned fact(unsigned);
 unsigned fib(unsigned);
 unsigned mult(unsigned, unsigned);
@@ -46,61 +53,48 @@ int main() {
  * TODO: make them tail recursive :)
 *******************************************************************************/
 
-unsigned fact(unsigned n) {
-    // base cases (combined)
-    if (n <= 1) {
-        return 1;
-    }
+unsigned fact_helper(unsigned n, unsigned acc) {
+    if (n <= 1) return acc;
+    return fact_helper(n - 1, acc * n);
+}
 
-    // recursive case
-    unsigned res = fact(n - 1);
-    return res * n;
+unsigned fact(unsigned n) {
+    return fact_helper(n, 1);
+}
+
+unsigned fib_helper(unsigned n, unsigned a, unsigned b) {
+    if (n == 0) return a;
+    if (n == 1) return b;
+    return fib_helper(n - 1, b, a + b);
 }
 
 unsigned fib(unsigned n) {
-    // base case 1
-    if (n == 0) {
-        return 0;
-    }
+    return fib_helper(n, 0, 1);
+}
 
-    // base case 2
-    else if (n == 1) {
-        return 1;
-    }
-
-    // recursive case
-    return fib(n - 1) + fib(n - 2);
+unsigned mult_helper(unsigned x, unsigned y, unsigned acc) {
+    if (y == 0) return acc;
+    return mult_helper(x, y - 1, acc + x);
 }
 
 unsigned mult(unsigned x, unsigned y) {
-    // base case
-    if (y == 0) {
-        return 0;
-    }
+    return mult_helper(x, y, 0);
+}
 
-    // recursive case
-    unsigned res = mult(x, y - 1);
-    return res + x;
+unsigned power_helper(unsigned x, unsigned y, unsigned acc) {
+    if (y == 0) return acc;
+    return power_helper(x, y - 1, acc * x);
 }
 
 unsigned power(unsigned x, unsigned y) {
-    // base case
-    if (y == 0) {
-        return 1;
-    }
+    return power_helper(x, y, 1);
+}
 
-    // recursive case
-    unsigned res = power(x, y - 1);
-    return res * x;
+unsigned product_helper(unsigned x, unsigned y, unsigned acc) {
+    if (x > y) return acc;
+    return product_helper(x + 1, y, acc * x);
 }
 
 unsigned product(unsigned x, unsigned y) {
-    // base case
-    if (x == y) {
-        return x;
-    }
-
-    // recursive case
-    unsigned p = product(x + 1, y);
-    return p * x;
+    return product_helper(x, y, 1);
 }
